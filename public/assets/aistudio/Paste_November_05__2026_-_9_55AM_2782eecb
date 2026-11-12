@@ -1,0 +1,1072 @@
+# Runtrackr
+## Product Documentation
+
+**Version:** 0.2  
+**Last updated:** November 5, 2026  
+**Status:** Product specification ready for implementation
+
+---
+
+# 1. Product Overview
+
+Runtrackr is a running progress tracker that helps runners understand whether they're actually improving over time.
+
+The app calculates a performance score for every run using running speed and average heart rate. It then visualizes how that score changes over days, weeks, months, quarters, and years.
+
+The main purpose is to make running performance easier to track and compare over time, without requiring users to maintain complicated spreadsheets or manually calculate their own statistics.
+
+### Product principles
+
+- **Track progress, not just activity.** Distance and pace alone don't tell the whole story. Runtrackr uses pace and heart rate to provide another way to evaluate performance.
+- **Focus on the bigger picture.** The app emphasizes long-term trends rather than detailed analysis of individual runs.
+- **Keep things simple.** Logging, reviewing, and comparing runs should be straightforward.
+- **Make historical data useful.** Users should be able to understand how far they've come since their earliest recorded run.
+- **Keep the product focused.** Features that don't contribute to the main purpose should wait for later versions.
+
+### Target users
+
+- Recreational runners.
+- Runners who track their heart rate.
+- Strava users who want more meaningful running statistics.
+- People who currently use Excel or spreadsheets to track running progress.
+- People who enjoy looking at performance data without needing a highly technical analytics platform.
+
+Runtrackr is not intended to compete with highly detailed analytics platforms such as Runalyze or Intervals.icu. Its focus is a more approachable way to understand running progress.
+
+---
+
+# 2. The Problem
+
+### Progress is difficult to see
+
+Running faster at the same heart rate, or maintaining the same pace with a lower heart rate, can indicate improved performance.
+
+However, many fitness applications emphasize distance, duration, and average pace. This makes it difficult to understand whether running efficiency is actually improving.
+
+### Manual tracking is exhausting
+
+Spreadsheets provide flexibility, but manually entering every run and maintaining formulas becomes repetitive.
+
+They are also inconvenient to use on mobile devices, where most runners access their activity data.
+
+### Progress happens gradually
+
+Running improvements develop over weeks, months, and years.
+
+A single run doesn't tell the whole story. Users need to compare their performance across different periods to understand their development.
+
+### It's difficult to understand how far you've come
+
+Comparing current performance with the beginning of a running journey can make long-term improvements easier to recognize.
+
+Runtrackr should make this comparison visible without requiring users to calculate it themselves.
+
+---
+
+# 3. How Runtrackr Works
+
+Every eligible run receives a score based on its average running speed and average heart rate.
+
+A higher score represents a higher running speed relative to heart rate.
+
+The app then uses these scores to calculate averages across different time periods and display performance trends.
+
+The main experience consists of:
+
+1. Recording running activities.
+2. Importing historical running activities from CSV.
+3. Automatically calculating running scores.
+4. Viewing performance charts.
+5. Reviewing historical running data.
+6. Comparing selected runs or periods.
+7. Tracking progress from the earliest recorded activity.
+
+---
+
+# 4. Score Calculation
+
+This section replaces the earlier ambiguous formula description.
+
+### Formula
+
+The score is calculated using normalized running speed in meters per minute:
+
+**Step 1: Calculate running speed**
+
+`Speed (m/min) = Distance (meters) / Moving Time (minutes)`
+
+**Step 2: Calculate the score**
+
+`Score = Speed (m/min) × 100 / Average Heart Rate`
+
+Equivalent formula:
+
+`Score = Distance (meters) × 6000 / (Moving Time (seconds) × Average Heart Rate)`
+
+### Why moving time?
+
+Moving time is used instead of elapsed time.
+
+This makes the score reflect the time spent moving rather than the total time between the start and end of an activity.
+
+It also means that pauses do not reduce the calculated running speed in the same way that elapsed time would.
+
+### Example calculation
+
+Example activity:
+
+| Metric | Value |
+|---|---:|
+| Distance | 6,979.8 m |
+| Moving time | 3,207 seconds |
+| Average heart rate | 159 bpm |
+| Moving time in minutes | 53.45 min |
+| Speed | 130.58 m/min |
+| **Score** | **82.13** |
+
+Calculation:
+
+`130.58 × 100 / 159 = 82.13`
+
+### Score behavior
+
+- The score is calculated automatically.
+- The score is recalculated whenever a run is edited.
+- The formula is fixed in version 1.
+- There is no additional scaling or normalization after the formula.
+- A higher score represents better performance according to this formula.
+- Scores in the creator's existing data generally fall within approximately 80–150.
+- There is no defined perfect score.
+
+### Period averages
+
+Weekly, monthly, quarterly, and yearly scores use a simple arithmetic average:
+
+`Average Score = Sum of Run Scores / Number of Eligible Runs`
+
+Runs without a valid heart-rate value are excluded from score averages.
+
+### Important limitations
+
+The formula is a simplified performance indicator, not a complete measure of running fitness.
+
+It does not currently account for:
+
+- Elevation gain.
+- Terrain differences.
+- Weather conditions.
+- Temperature.
+- Wind.
+- Running distance differences.
+- Interval structures.
+- Other physiological factors.
+
+These limitations should be understood when interpreting the score.
+
+---
+
+# 5. Version 1 Scope
+
+### Main purpose
+
+Version 1 should provide a complete working application for tracking running performance over time.
+
+A user should be able to:
+
+1. Sign in using Google.
+2. Add a running activity manually.
+3. Edit and delete running activities.
+4. Import running activities from a CSV file.
+5. Automatically calculate scores when sufficient data is available.
+6. View running performance in charts.
+7. View individual runs and historical period summaries in tables.
+8. Switch between daily, weekly, monthly, quarterly, and yearly views.
+9. Compare selected runs or periods.
+10. Manage their account and delete their account.
+
+### Not included in version 1
+
+- Strava API integration or automatic synchronization.
+- Cycling and other sports.
+- Interval-run analysis.
+- Trail-run or elevation-adjusted scoring.
+- Outlier detection.
+- Warnings for unusually high or low scores.
+- Race-time predictions.
+- Performance forecasting.
+- AI-generated running insights.
+- Exporting data to Excel or CSV.
+- Miles as a unit option.
+- Editable score formulas.
+- Heart-rate zones.
+- Advanced single-run analysis.
+- Social comparisons with other runners.
+- Additional recap metrics such as weekly distance averages.
+- Dynamic score color scales.
+- More advanced mobile input controls.
+- A native mobile application.
+
+**Rule for new ideas:** Any new feature that isn't necessary for the current version should be recorded for a later version rather than added to version 1.
+
+---
+
+# 6. Data Structure
+
+Each running activity stores the following information.
+
+| Field | Required | Description |
+|---|---|---|
+| Title | Yes | Defaults to "Outdoor run" |
+| Description | No | Additional activity notes |
+| Location | No | Plain text location |
+| Date | Yes | Activity date |
+| Time | Yes | Activity start time |
+| Distance | Yes | Distance in kilometers |
+| Duration | Yes | Moving duration |
+| Pace | Calculated | Displayed in minutes per kilometer |
+| Average heart rate | Conditional | Required for manual entry; may be missing in imported activities |
+| Score | Conditional | Automatically calculated when heart rate is available |
+| Elevation gain | No | Meters |
+| Cadence | No | Steps per minute |
+
+### Input behavior
+
+Distance, duration, and pace are interconnected.
+
+- Changing distance recalculates pace.
+- Changing duration recalculates pace.
+- Changing pace recalculates distance.
+- Duration remains as entered when pace is changed.
+
+The interface should use simple number inputs, date and time pickers, and suitable duration controls.
+
+### Manual entry requirements
+
+Manual run entry requires:
+
+- Title.
+- Date.
+- Time.
+- Distance.
+- Duration.
+- Pace.
+- Average heart rate.
+
+Optional fields:
+
+- Description.
+- Location.
+- Elevation gain.
+- Cadence.
+
+Pace, distance, and duration must remain synchronized.
+
+---
+
+# 7. Dashboard
+
+The dashboard is the primary screen of Runtrackr.
+
+Its purpose is to provide an overview of running performance and historical progress.
+
+### Dashboard structure
+
+1. Header.
+2. Time grouping tabs.
+3. Quick recap.
+4. Performance chart.
+5. Running activity table.
+
+### Header
+
+The header contains:
+
+- Welcome message.
+- User's name.
+- User avatar.
+- Upload run button.
+- Add run button.
+
+The avatar opens the account menu.
+
+### Time grouping
+
+Users can switch between:
+
+- Daily.
+- Weekly.
+- Monthly.
+- Quarterly.
+- Yearly.
+
+These tabs control the chart and table.
+
+### Quick recap
+
+Three metrics are displayed:
+
+1. Highest score.
+2. First recorded run or period.
+3. Latest recorded run or period.
+
+The recap follows the selected time grouping.
+
+For daily view, it compares individual runs.
+
+For weekly, monthly, quarterly, and yearly views, it compares the average score of each period.
+
+Only scores are included in version 1.
+
+### Empty dashboard
+
+The empty dashboard design represents the state where the user has not imported or recorded any activities.
+
+It should not be treated as the normal dashboard layout for users who already have running data.
+
+When no runs exist:
+
+- The chart shows an empty or zero state.
+- Metrics show zero or an appropriate empty value.
+- The dashboard remains structurally consistent.
+- Users can still access the Add Run and Upload Run actions.
+
+---
+
+# 8. Charts
+
+The chart is a line chart showing performance over time.
+
+There are two chart modes:
+
+- Score.
+- Volume.
+
+### Score chart
+
+Displays average running score for the selected time grouping.
+
+Rules:
+
+- Periods without eligible runs are skipped.
+- The line connects the surrounding available data points.
+- Periods without scores are not treated as zero.
+- Runs without heart-rate data do not contribute to the score.
+
+### Volume chart
+
+Displays total running distance for each period.
+
+Rules:
+
+- Periods without runs show zero.
+- Distance is displayed in kilometers.
+
+### Chart interaction
+
+- Users can touch or click a point.
+- A vertical indicator marks the selected point.
+- The selected period label updates.
+- The three metrics above the chart update to reflect the selected period.
+- Users can drag horizontally to browse historical data.
+
+### Chart metrics
+
+For Score mode:
+
+- Average score.
+- Average pace.
+- Average heart rate.
+
+For Volume mode:
+
+- Number of runs.
+- Total distance.
+- Total duration.
+
+### Chart display
+
+- Approximately 12 points should be visible on a mobile screen.
+- The chart should support horizontal navigation.
+- The vertical axis uses a small number of labels.
+- The chart should support touch interactions.
+- The selected data point should be visually clear.
+
+---
+
+# 9. Running Activity Table
+
+The table displays individual runs or period summaries, depending on the selected time grouping.
+
+### Daily view
+
+Each row represents one run.
+
+Columns:
+
+- Selection checkbox.
+- Date and time.
+- Distance.
+- Duration.
+- Average pace.
+- Average heart rate.
+- Score.
+
+The score is displayed using a bucket or fill indicator. A fuller indicator represents a higher score.
+
+### Weekly view
+
+Each row represents one week.
+
+Displays:
+
+- Week date range.
+- Number of runs.
+- Average or total metrics for that period.
+
+### Monthly view
+
+Each row represents one month.
+
+### Quarterly view
+
+Each row represents one calendar quarter.
+
+Example: January–March 2026.
+
+### Yearly view
+
+Each row represents one year.
+
+### Table interactions
+
+- Selecting one or more rows reveals Delete and Compare actions.
+- A select-all option is available.
+- Daily rows open individual run details.
+- Weekly, monthly, quarterly, and yearly rows open period summaries.
+- Period summary lists do not include selection checkboxes.
+
+---
+
+# 10. Run Management
+
+### Add run
+
+1. User selects Add Run.
+2. The add-run screen opens.
+3. User fills in the required fields.
+4. The application validates the information.
+5. The application checks for overlapping activities.
+6. The activity is saved.
+7. A success toast confirms that the run was added.
+
+### Edit run
+
+The edit screen uses the same fields as the add-run screen.
+
+Saving changes recalculates the score and updates the activity.
+
+A success toast confirms the update.
+
+### Delete run
+
+Deleting an individual run requires confirmation.
+
+Users can also select multiple runs or periods from the dashboard and delete them together.
+
+The confirmation should communicate how many activities will be deleted.
+
+### Run detail
+
+The run detail screen contains:
+
+- Date and time.
+- Title.
+- Description.
+- Location.
+- Score.
+- Distance.
+- Duration.
+- Average pace.
+- Average heart rate.
+- Elevation gain.
+- Cadence.
+- Edit button.
+- Delete button.
+
+If heart-rate data is missing, the score is unavailable and the interface displays a message explaining that the user must enter an estimated heart rate to calculate it.
+
+---
+
+# 11. Period Summary
+
+The period summary screen opens when a user selects a weekly, monthly, quarterly, or yearly table row.
+
+It displays:
+
+- Period identification.
+- Average score.
+- Average pace.
+- Average heart rate.
+- Total distance.
+- Total duration.
+- Number of runs.
+- List of runs within that period.
+
+Selecting an individual run opens its run detail screen.
+
+---
+
+# 12. Compare
+
+The Compare screen allows users to compare multiple selected runs or periods.
+
+### Behavior
+
+1. User selects one or more rows from the dashboard.
+2. User selects Compare.
+3. The Compare screen opens.
+4. Selected data is displayed in chronological order.
+5. The chart visualizes the selected scores.
+6. The selected runs or periods are listed below the chart.
+
+The chart follows the time grouping active on the dashboard.
+
+For example, selecting weekly rows produces a weekly comparison.
+
+---
+
+# 13. CSV Import
+
+CSV import is a small utility intended primarily for importing the creator's historical running data.
+
+It is not the main product feature or a full Strava integration.
+
+Version 1 supports CSV uploads only. There is no Strava API connection or automatic synchronization.
+
+### Supported data
+
+The uploaded CSV is expected to follow the supported Strava activity export structure.
+
+Only activities where:
+
+`Activity Type = Run`
+
+are imported.
+
+Other activities, including rides, walks, swims, hikes, and weight training, are ignored.
+
+### Verified CSV structure
+
+The uploaded activity file was inspected.
+
+It contains 328 activities and 104 columns.
+
+Activity types include:
+
+| Activity type | Count |
+|---|---:|
+| Run | 177 |
+| Ride | 117 |
+| Walk | 16 |
+| Swim | 8 |
+| Weight Training | 7 |
+| Hike | 3 |
+
+The importer should use only the relevant fields.
+
+### CSV field mapping
+
+| CSV column | Runtrackr field | Conversion |
+|---|---|---|
+| Activity Type | Activity filter | Only Run |
+| Activity Date | Date and time | Parse activity date |
+| Activity Name | Title | Use activity name |
+| Activity Description | Description | Direct mapping |
+| Distance.1 | Distance | Meters converted to kilometers |
+| Moving Time | Duration | Seconds |
+| Average Heart Rate | Average heart rate | Direct numeric value |
+| Elevation Gain | Elevation gain | Meters |
+| Average Cadence | Cadence | Direct numeric value |
+
+The original `Distance` field should not be used when `Distance.1` provides the numeric distance in meters.
+
+Moving Time must be used instead of Elapsed Time.
+
+### Missing heart-rate data
+
+The inspected file contains:
+
+- 177 running activities.
+- 116 with average heart-rate data.
+- 61 without average heart-rate data.
+
+Missing heart-rate data is an expected condition, not an import failure.
+
+Rules:
+
+- Import the activity.
+- Leave average heart rate empty.
+- Do not calculate a score.
+- Flag the activity as missing heart-rate data.
+- Display an inline message in the table and run detail.
+- Allow the user to enter an estimated heart rate or delete the run.
+
+### Import behavior
+
+The import feature should remain simple and low-profile.
+
+The user opens Upload Run, selects a CSV file, and the app processes it.
+
+The original CSV should only be used temporarily for parsing. It should not be retained as a stored user file after processing.
+
+The import should not require a permanent copy of the uploaded file.
+
+### Import validation
+
+File-level errors:
+
+- Unsupported file format.
+- Empty file.
+- Missing required columns.
+- Unreadable or corrupted file.
+- Invalid encoding.
+
+Row-level handling:
+
+- Non-running activities are ignored.
+- Missing or unreadable dates are skipped.
+- Missing, zero, or invalid distance is skipped.
+- Missing, zero, or invalid moving time is skipped.
+- Future-dated activities are skipped.
+- Overlapping activities are skipped.
+- Missing heart rate is imported and flagged.
+- Missing elevation or cadence is allowed.
+- Missing title uses "Outdoor run".
+
+### Duplicate handling
+
+The overlap rule applies to imported activities as well.
+
+An imported activity that overlaps an existing run is skipped.
+
+The importer should avoid importing the same activity twice when the overlap rule identifies it as conflicting.
+
+### Import transaction
+
+The import should be atomic:
+
+- All accepted activities are saved together.
+- If the import fails, it should not leave partially imported data.
+
+### Import feedback
+
+A success toast confirms that the import is complete.
+
+Failed imports display an error message with an option to learn more or close the message.
+
+The original document's detailed import summary and confirmation flow is not required for version 1.
+
+---
+
+# 14. Rules and Edge Cases
+
+### Overlapping runs
+
+Each run occupies a time range from its start time to its start time plus moving duration.
+
+A new or edited run cannot overlap another run.
+
+The app blocks the save and explains the conflict.
+
+Multiple runs on the same day are allowed when their time ranges do not overlap.
+
+### Missing heart rate
+
+Manual entries require heart rate.
+
+Imported runs may have missing heart-rate data.
+
+Such activities remain visible but do not receive a score until heart rate is entered.
+
+### Unusual values
+
+Unusual values are accepted without warnings.
+
+There is no outlier detection or automatic rejection based on unusual pace or heart-rate values in version 1.
+
+### Empty periods
+
+Score chart:
+
+- Skip periods without eligible scores.
+- Connect surrounding points.
+
+Volume chart:
+
+- Show zero for periods without runs.
+
+Empty periods are excluded from score averages.
+
+### No activities
+
+The dashboard displays its empty state.
+
+The user can still add or import activities.
+
+### First activity
+
+The first recorded run is the beginning of the user's running progress history.
+
+The chart starts from the earliest recorded run.
+
+### Time grouping
+
+- Weeks start on Monday.
+- Quarters follow calendar quarters.
+- Distances use kilometers.
+- Pace uses minutes per kilometer.
+
+---
+
+# 15. Account and Authentication
+
+### Authentication
+
+Google sign-in is the only authentication method in version 1.
+
+The user's name and email come from Google sign-in.
+
+The name is used in the dashboard welcome message.
+
+### Account menu
+
+The account menu contains:
+
+- Manage account.
+- Settings.
+- Log out.
+- Delete account.
+
+### Manage account
+
+Users can:
+
+- View their Google account name.
+- View their Google email address.
+- Upload an optional avatar.
+
+The app should not request unnecessary personal information.
+
+### Settings
+
+Settings contain:
+
+- Privacy Policy.
+- Terms and Conditions.
+- Guides.
+
+Guides include:
+
+- How to import running activities.
+- How the score works.
+
+### Delete account
+
+Users must be able to permanently delete their account.
+
+Deletion must remove:
+
+- Their account.
+- Their running activities.
+- Their stored avatar and other associated user data.
+
+The implementation must ensure that deletion is handled securely and that the actual deletion behavior matches the promises made in the Terms and Privacy Policy.
+
+---
+
+# 16. Privacy and Data Handling
+
+Current decisions:
+
+- Google sign-in provides the user's name and email.
+- No additional account profile information is required.
+- Uploaded CSV files are processed temporarily.
+- The original CSV should not be retained after parsing.
+- No analytics are planned for version 1.
+
+The app uses a database to store running activity data.
+
+Each user must only be able to access their own activities.
+
+The application must enforce user-level data access restrictions rather than relying only on frontend filtering.
+
+The exact data-retention and infrastructure details should be reflected accurately in the final Privacy Policy.
+
+---
+
+# 17. Design System and Figma Reference
+
+The Figma design is the primary visual reference for implementation.
+
+**Figma file:**  
+https://www.figma.com/design/eAftUMm8PJiWGnok7vcSoU/Running-Progress-Tracker?node-id=0-1
+
+Only the page named **Main** should be used as the implementation reference. Ignore the page named Sketch.
+
+### Figma sections
+
+The Main page contains:
+
+- Main App.
+- Component.
+- Design System.
+- Presentation.
+- Documentation.
+
+The Main App section contains the application screens and states.
+
+The Component section contains reusable interface components.
+
+The Design System section contains visual tokens and styling rules.
+
+### Visual tokens
+
+| Token | Value |
+|---|---|
+| Background | `#0D0C11` |
+| Primary | `#4963F4` |
+| White | `#E3E4E9` |
+| Grey | `#87878F` |
+| Layer 1 | `#19191F` |
+| Layer 2 | `#27272F` |
+| Layer 3 | `#3C3C45` |
+| Border | `#303037` |
+| Green | `#4AC189` |
+| Orange | `#D7960A` |
+| Red | `#BA4949` |
+
+### Typography
+
+- Roboto for general interface text.
+- Anton for large metrics and scores.
+
+### Layout
+
+The mobile design reference uses:
+
+- Frame: 375 × 812 px.
+- Content width: 343 px.
+- Horizontal margins: 16 px.
+
+### Styling
+
+- Dark interface.
+- Rounded corners, generally 8–12 px.
+- Pill-shaped buttons and tabs.
+- Reusable visual components.
+- Consistent spacing and contrast.
+
+### Components
+
+Reusable components include:
+
+- Buttons.
+- Inputs.
+- Metrics.
+- Charts.
+- Tables.
+- Tabs.
+- Badges.
+- Popups and dialogs.
+- Inline messages.
+- Toast notifications.
+
+Components should be implemented once and reused wherever possible.
+
+The Figma design should guide the visual implementation. The implementation should not introduce unnecessary visual changes.
+
+Not every prototype transition or interaction has been independently verified yet. Any missing behavior should be checked against the design and product rules during implementation.
+
+---
+
+# 18. Technical Decisions
+
+### Database and backend
+
+Use Supabase.
+
+Responsibilities:
+
+- Store running activities.
+- Store user-related records.
+- Handle authentication.
+- Enforce per-user access.
+- Store optional avatar images.
+
+### Authentication
+
+Use Google authentication through Supabase.
+
+### UI components
+
+Use custom-styled components for the visual appearance, with Radix primitives for accessible interaction behavior.
+
+Radix should handle behavior such as:
+
+- Keyboard interaction.
+- Focus management.
+- Opening and closing dialogs.
+- Accessible component states.
+
+If building every component custom becomes unnecessarily difficult, ready-made components can be considered as an alternative.
+
+### Charts
+
+ECharts is the preferred charting library.
+
+It should be tested early for:
+
+- Touch indicators.
+- Horizontal dragging.
+- Mobile interaction.
+- Styling flexibility.
+
+Visx is an alternative if a more fully custom chart becomes necessary.
+
+### Development approach
+
+The project starts from scratch.
+
+The intended workflow is to build and manage the application through ChatGPT rather than requiring the user to set up VS Code or a local development environment.
+
+The user is a product/UI designer, not a software developer. Technical implementation should therefore be handled with clear explanations and minimal unnecessary setup.
+
+The actual application will still need suitable development, database, and hosting infrastructure. ChatGPT should not be treated as the production hosting provider.
+
+---
+
+# 19. Development Priorities
+
+Implementation should follow this order.
+
+### Stage 1: Project foundation
+
+- Initialize the application.
+- Establish the project structure.
+- Configure the frontend framework.
+- Set up design tokens.
+- Build reusable interface components.
+- Implement the application layout.
+
+### Stage 2: Authentication and database
+
+- Configure Supabase.
+- Set up Google sign-in.
+- Create the running activity database structure.
+- Configure user-level access restrictions.
+- Set up avatar storage.
+
+### Stage 3: Core calculations
+
+- Implement the score formula.
+- Implement pace and speed calculations.
+- Implement date grouping.
+- Implement period averages.
+- Implement overlap validation.
+
+### Stage 4: Run management
+
+- Add run.
+- Edit run.
+- Delete run.
+- Run detail.
+- Missing heart-rate handling.
+
+### Stage 5: Dashboard
+
+- Dashboard layout.
+- Time grouping tabs.
+- Quick recap.
+- Score chart.
+- Volume chart.
+- Running activity table.
+- Empty states.
+- Chart interactions.
+
+### Stage 6: Period summary and comparison
+
+- Weekly summary.
+- Monthly summary.
+- Quarterly summary.
+- Yearly summary.
+- Compare selected runs or periods.
+
+### Stage 7: Account and settings
+
+- Account menu.
+- Manage account.
+- Avatar upload.
+- Settings.
+- Guides.
+- Privacy Policy.
+- Terms and Conditions.
+- Log out.
+- Secure account deletion.
+
+### Stage 8: CSV import
+
+- CSV file selection.
+- File validation.
+- Column mapping.
+- Activity filtering.
+- Data conversion.
+- Missing heart-rate handling.
+- Overlap checking.
+- Atomic import.
+- Success and error feedback.
+
+### Stage 9: Testing and release
+
+- Test calculations against known activities.
+- Test manual entry.
+- Test editing and deletion.
+- Test overlapping activities.
+- Test CSV import.
+- Test missing heart-rate activities.
+- Test chart interactions.
+- Test period averages.
+- Test account isolation.
+- Test account deletion.
+- Test mobile layouts.
+- Deploy the application.
+
+---
+
+# 20. Open Decisions
+
+The following items should be resolved during implementation or before public release.
+
+1. **CSV compatibility:** The uploaded file has been inspected, but compatibility with other versions or language settings of Strava exports has not been established.
+2. **CSV row limits:** A reasonable file-size and activity-count limit needs to be selected.
+3. **Timezone handling:** The activity date format and timezone interpretation should be verified carefully to prevent activities from appearing on the wrong date.
+4. **Authentication and deployment configuration:** Google OAuth redirect URLs and production environment variables must be configured.
+5. **Account deletion:** The backend deletion process must be implemented and tested against the legal promises.
+6. **Import duplicate behavior:** The overlap rule is established, but exact handling of identical activity records and unusual same-time cases should be tested.
+7. **No-heart-rate editing:** The interface should allow users to add an estimated heart rate to an imported activity and calculate its score afterward.
+8. **Chart touch behavior:** ECharts should be tested early on mobile.
+
+---
+
+# 21. Final Product Definition
+
+Runtrackr is a focused running performance tracker.
+
+It helps recreational runners understand how their performance changes over time by calculating a score based on running speed and heart rate.
+
+The core experience is simple:
+
+**Record your runs. See your score. Track your progress.**
+
+Version 1 should prioritize a reliable, understandable, and visually consistent experience over adding more features.
+
+The goal is not to build another comprehensive fitness platform. It is to make one specific thing easier: understanding whether you're getting better at running.

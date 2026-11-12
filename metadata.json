@@ -1,0 +1,6 @@
+{
+  "name": "Runtrackr",
+  "description": "Running progress tracker calculating physiological performance scores using speed and heart rate across daily, weekly, monthly, quarterly, and yearly timelines.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

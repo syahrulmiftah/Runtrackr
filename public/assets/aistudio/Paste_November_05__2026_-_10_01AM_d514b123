@@ -1,0 +1,1765 @@
+# RUNTRACKR
+# FIGMA DESIGN SPECIFICATION
+
+**Document type:** Design-to-development handoff  
+**Product:** Runtrackr  
+**Source:** Running Progress Tracker Figma file  
+**Source page:** Main  
+**Excluded sections:** Presentation, Documentation  
+**Purpose:** Enable another AI or developer to understand and implement the interface without accessing the original Figma file.
+
+---
+
+# 1. SOURCE FILE STRUCTURE
+
+## 1.1 Figma source
+
+**File:** Running Progress Tracker
+
+**Figma URL:**
+https://www.figma.com/design/eAftUMm8PJiWGnok7vcSoU/Running-Progress-Tracker?node-id=0-1
+
+The file contains multiple pages. Only the page named **Main** is part of this specification.
+
+The page named **Sketch** must be ignored.
+
+## 1.2 Main page organization
+
+The Main page is organized into five major sections:
+
+1. Main App
+2. Component
+3. Design System
+4. Presentation
+5. Documentation
+
+This specification covers only:
+
+- Main App
+- Component
+- Design System
+
+Presentation and Documentation are intentionally excluded.
+
+## 1.3 Design organization principles
+
+The design is organized around three levels:
+
+**Design System:** Defines the foundational visual language, including colors, typography, and reusable styling.
+
+**Components:** Defines reusable interface elements and their visual variations.
+
+**Main App:** Uses the design system and components to construct complete application screens.
+
+Implementation should preserve this structure. A component should not be recreated separately every time it appears on a screen.
+
+---
+
+# 2. PRODUCT INTERFACE OVERVIEW
+
+Runtrackr is a dark-themed running performance tracker.
+
+Its interface is designed to help users understand their running progress through scores, performance metrics, charts, and historical activity records.
+
+The primary experience is a dashboard, supported by activity management, comparison, account management, and supporting screens.
+
+The interface prioritizes:
+
+- Performance metrics.
+- Data visualization.
+- Historical activity records.
+- Compact information presentation.
+- Reusable components.
+- Consistency across different time groupings.
+
+The visual design is intended to be functional and data-oriented rather than decorative.
+
+---
+
+# 3. DESIGN TOKENS
+
+## 3.1 Color palette
+
+The application uses a dark interface with several layers of background surfaces.
+
+### Core colors
+
+| Token | Hex | Intended use |
+|---|---|---|
+| Background | #0D0C11 | Main application background |
+| Primary | #4963F4 | Primary interactive color |
+| White | #E3E4E9 | Primary text and high-emphasis content |
+| Grey | #87878F | Secondary text and lower-emphasis content |
+| Layer 1 | #19191F | First elevated surface |
+| Layer 2 | #27272F | Secondary elevated surface |
+| Layer 3 | #3C3C45 | Higher-contrast surface or component layer |
+| Border | #303037 | Borders and separators |
+
+### Semantic colors
+
+| Token | Hex | Semantic meaning |
+|---|---|---|
+| Green | #4AC189 | Positive or successful state |
+| Orange | #D7960A | Warning or attention state |
+| Red | #BA4949 | Error, destructive, or negative state |
+
+### Color usage guidance
+
+**Background — #0D0C11**
+
+The darkest base color. Use it as the primary application canvas.
+
+**Primary — #4963F4**
+
+The main accent color. Use it for primary actions and important interactive elements.
+
+**White — #E3E4E9**
+
+Use for important text, metric values, and prominent information.
+
+**Grey — #87878F**
+
+Use for secondary information, supporting labels, descriptions, and less prominent interface text.
+
+**Layer 1 — #19191F**
+
+Use for elevated surfaces against the main background.
+
+**Layer 2 — #27272F**
+
+Use for nested surfaces, secondary containers, and areas requiring more separation.
+
+**Layer 3 — #3C3C45**
+
+Use for stronger surface differentiation and component elements that need additional contrast.
+
+**Border — #303037**
+
+Use for subtle boundaries between surfaces and components.
+
+### Semantic color guidance
+
+Green, orange, and red are reserved for meaningful statuses.
+
+They should not replace the primary accent color or become decorative colors.
+
+Exact component-to-color assignments should follow the source component designs where available.
+
+---
+
+## 3.2 Surface hierarchy
+
+The application uses multiple dark surface levels rather than placing every component directly on the main background.
+
+The confirmed hierarchy is:
+
+1. Background: #0D0C11
+2. Layer 1: #19191F
+3. Layer 2: #27272F
+4. Layer 3: #3C3C45
+
+The hierarchy provides visual separation without relying on bright colors.
+
+Implementation should preserve the contrast between these levels.
+
+Do not replace the dark surfaces with a single uniform background.
+
+---
+
+## 3.3 Typography
+
+The design uses two typefaces.
+
+| Typeface | Purpose |
+|---|---|
+| Roboto | General interface typography |
+| Anton | Large metrics and prominent score values |
+
+### Roboto
+
+Roboto is the primary interface font.
+
+Use it for:
+
+- Navigation.
+- Buttons.
+- Input labels.
+- Form fields.
+- Supporting text.
+- Table content.
+- Metric labels.
+- Descriptions.
+- General application text.
+
+### Anton
+
+Anton is used for large metric values and scores.
+
+Its purpose is to make important numerical information visually prominent.
+
+Use it for:
+
+- Large running scores.
+- Prominent dashboard metrics.
+- Large numerical displays.
+
+Do not use Anton for ordinary paragraphs, labels, or long text.
+
+### Typography implementation rules
+
+- Preserve the distinction between general interface text and prominent metric typography.
+- Do not replace Anton with Roboto for large score displays.
+- Do not apply Anton to every numerical value automatically.
+- Use the original Figma text styles when available.
+
+**Not yet verified:** Exact font sizes, line heights, letter spacing, font weights, and individual text-style names. These must be extracted from the actual text styles in Figma before treating them as fixed specifications.
+
+---
+
+## 3.4 Spacing and layout
+
+### Confirmed mobile reference
+
+| Property | Value |
+|---|---:|
+| Frame width | 375 px |
+| Frame height | 812 px |
+| Content width | 343 px |
+| Horizontal margin | 16 px |
+
+The mobile design uses a 16 px horizontal content margin.
+
+The 343 px content width is consistent with a 375 px screen:
+
+375 - 16 - 16 = 343 px.
+
+### Layout guidance
+
+- Keep content aligned to the same horizontal margins.
+- Maintain consistent alignment between dashboard sections.
+- Avoid arbitrary spacing between components.
+- Use reusable spacing values where possible.
+- Preserve the intended relationship between content groups.
+
+**Not yet verified:** The complete spacing scale, vertical gaps, padding values for each component, responsive breakpoints, and desktop layout dimensions.
+
+---
+
+## 3.5 Border radius
+
+The common corner radius range is 8–12 px.
+
+Use this range for:
+
+- Cards.
+- Inputs.
+- Containers.
+- Dialogs.
+- Other rounded surfaces.
+
+Pill-shaped controls are used for buttons and tabs.
+
+**Not yet verified:** The exact radius assigned to each component variant.
+
+---
+
+# 4. RESPONSIVE DESIGN REFERENCE
+
+## 4.1 Primary design reference
+
+The confirmed primary frame is:
+
+375 × 812 px.
+
+The main content area is:
+
+343 px wide.
+
+The design is mobile-first in its proportions and layout.
+
+## 4.2 Mobile layout rules
+
+- Use 16 px horizontal margins.
+- Keep important controls comfortably accessible.
+- Preserve readable table content.
+- Keep the dashboard information hierarchy clear.
+- Support chart touch interaction.
+- Avoid making the chart or tables unnecessarily dense.
+
+## 4.3 Responsive implementation
+
+The mobile Figma frame should be treated as the visual reference.
+
+Wider layouts should adapt the same hierarchy rather than introduce an entirely different application structure.
+
+**Not yet verified:** Exact desktop breakpoints, desktop frame sizes, tablet layouts, and whether individual sections change arrangement at wider widths.
+
+---
+
+# 5. MAIN APPLICATION SCREEN STRUCTURE
+
+The Main App section contains the application screens and their states.
+
+The screen inventory includes:
+
+1. Welcome and loading.
+2. Home dashboard.
+3. Missing heart-rate states.
+4. Compare.
+5. Account management and settings.
+6. Inner pages, notifications, and popups.
+
+The following sections document the known structure and intended contents.
+
+---
+
+# 6. WELCOME AND LOADING
+
+## 6.1 Welcome screen
+
+The welcome screen is the entry point for unauthenticated users.
+
+### Main purpose
+
+Allow the user to authenticate before accessing the application.
+
+### Known structure
+
+- Welcome screen content.
+- Google sign-in action.
+- Terms and Conditions agreement text.
+- Link to Terms and Conditions.
+
+### Authentication
+
+Google sign-in is the only authentication method specified for version 1.
+
+### Legal agreement
+
+A line below the sign-in button explains that continuing means the user agrees to the Terms and Conditions.
+
+The Terms and Conditions text should be linked to the corresponding legal page.
+
+**Not yet verified:** Exact welcome headline, supporting text, logo dimensions, button dimensions, background composition, and spacing.
+
+## 6.2 Loading screen
+
+A loading screen is included in the design.
+
+Its purpose is to communicate that the application is loading.
+
+The loading screen is optional during implementation if the application loads quickly enough that it is not needed.
+
+**Not yet verified:** Exact loading animation, illustration, or visual treatment.
+
+---
+
+# 7. HOME DASHBOARD
+
+The home dashboard is the central screen of Runtrackr.
+
+It provides the user's running performance overview.
+
+The known structure is organized vertically.
+
+## 7.1 Dashboard hierarchy
+
+From top to bottom:
+
+1. Header.
+2. Time grouping tabs.
+3. Quick recap.
+4. Chart.
+5. Activity table.
+
+The dashboard is the primary destination after authentication.
+
+---
+
+## 7.2 Header
+
+### Purpose
+
+Identify the user and provide access to the main actions.
+
+### Known contents
+
+- Welcome message.
+- User's name.
+- User avatar.
+- Upload Run button.
+- Add Run button.
+
+### User avatar
+
+The avatar opens the account menu.
+
+### Upload Run
+
+Opens the CSV upload flow.
+
+### Add Run
+
+Opens the manual run-entry screen.
+
+### Visual implementation
+
+The header should maintain clear separation between user identification and the main actions.
+
+**Not yet verified:** Exact alignment, button order, button sizes, avatar dimensions, icon choices, and spacing.
+
+---
+
+## 7.3 Time grouping tabs
+
+### Purpose
+
+Change the dashboard's time aggregation.
+
+### Available options
+
+- Daily.
+- Weekly.
+- Monthly.
+- Quarterly.
+- Yearly.
+
+### Behavior
+
+Selecting a time grouping updates:
+
+- Chart data.
+- Chart time range.
+- Quick recap.
+- Table contents.
+- Period summaries.
+
+The selected grouping is the primary dashboard navigation state.
+
+### Visual behavior
+
+Tabs should communicate the active selection clearly.
+
+The design uses pill-shaped tabs and controls.
+
+**Not yet verified:** Exact active/inactive styling, tab height, horizontal padding, and whether the tab group scrolls on narrower screens.
+
+---
+
+## 7.4 Quick recap
+
+### Purpose
+
+Give the user a short overview of their running progress.
+
+### Known metrics
+
+1. Highest score.
+2. First run or period.
+3. Latest run or period.
+
+### Highest score
+
+Displays the highest recorded score and the date on which it occurred.
+
+### First run
+
+Displays the score associated with the earliest run or period.
+
+### Latest run
+
+Displays the score associated with the most recent run or period.
+
+### Time grouping behavior
+
+The recap changes based on the selected time grouping.
+
+| Grouping | First and latest values represent |
+|---|---|
+| Daily | Individual runs |
+| Weekly | Weekly average scores |
+| Monthly | Monthly average scores |
+| Quarterly | Quarterly average scores |
+| Yearly | Yearly average scores |
+
+### Visual hierarchy
+
+The numerical score should be prominent.
+
+Supporting labels and dates should have lower visual emphasis.
+
+Anton is used for large metric values.
+
+**Not yet verified:** Exact card arrangement, component dimensions, internal padding, metric typography sizes, and whether the three metrics are separate cards or one grouped container.
+
+---
+
+## 7.5 Performance chart
+
+### Purpose
+
+Visualize running performance over time.
+
+### Chart modes
+
+- Score.
+- Volume.
+
+### Score mode
+
+Displays average running score across the selected time grouping.
+
+### Volume mode
+
+Displays running distance across the selected time grouping.
+
+### Chart controls
+
+The chart has a control to switch between Score and Volume.
+
+### Chart interaction
+
+The user can:
+
+- Select a chart point.
+- View the corresponding period.
+- See a vertical selection indicator.
+- Update the metrics displayed above the chart.
+- Drag horizontally to navigate historical data.
+
+### Score chart behavior
+
+Periods without eligible scores are skipped.
+
+The chart connects available data points across the missing periods.
+
+### Volume chart behavior
+
+Periods without runs display zero distance.
+
+### Chart layout
+
+The chart uses time on the horizontal axis and the selected metric on the vertical axis.
+
+Approximately 12 points should be visible on a mobile screen.
+
+**Not yet verified:** Exact chart dimensions, gridline visibility, stroke width, point radius, axis typography, selected-point colors, and tooltip styling.
+
+---
+
+## 7.6 Chart summary metrics
+
+The metrics above the chart update based on the selected chart point or period.
+
+### Score mode
+
+Displays:
+
+1. Average score.
+2. Average pace.
+3. Average heart rate.
+
+### Volume mode
+
+Displays:
+
+1. Number of runs.
+2. Total distance.
+3. Total duration.
+
+The summary should clearly communicate the selected time period.
+
+---
+
+## 7.7 Activity table
+
+### Purpose
+
+Display the user's running history.
+
+The table changes according to the selected time grouping.
+
+### Daily table
+
+Each row represents an individual run.
+
+Known columns:
+
+1. Selection checkbox.
+2. Date and time.
+3. Distance.
+4. Duration.
+5. Average pace.
+6. Average heart rate.
+7. Score.
+
+### Score indicator
+
+The score is displayed using a fill or bucket-style indicator.
+
+A fuller indicator represents a higher score.
+
+A dynamic color scale is not part of version 1.
+
+### Weekly table
+
+Each row represents one week.
+
+The row includes:
+
+- Date range.
+- Number of runs.
+- Period metrics.
+
+### Monthly table
+
+Each row represents one month.
+
+### Quarterly table
+
+Each row represents one calendar quarter.
+
+### Yearly table
+
+Each row represents one year.
+
+### Row interactions
+
+Daily rows open run details.
+
+Other grouping rows open period summaries.
+
+### Multi-selection
+
+The dashboard table supports checkboxes.
+
+When one or more rows are selected:
+
+- Delete action becomes available.
+- Compare action becomes available.
+
+A select-all option is also supported.
+
+**Not yet verified:** Exact column widths, row heights, checkbox appearance, table header typography, hover states, selected-row background, and responsive overflow behavior.
+
+---
+
+# 8. EMPTY DASHBOARD
+
+The empty dashboard is a state of the dashboard, not a separate permanent dashboard design.
+
+It is displayed when the user has no recorded activities.
+
+### Expected behavior
+
+- Preserve the main dashboard structure.
+- Display an appropriate empty chart state.
+- Display zero or empty values in metrics.
+- Allow the user to add a run.
+- Allow the user to upload running data.
+
+The empty-state design should not replace the populated dashboard for users who already have data.
+
+**Not yet verified:** Exact empty-state message, illustration, CTA arrangement, and chart appearance.
+
+---
+
+# 9. MISSING HEART-RATE STATES
+
+The design includes states for runs without heart-rate data.
+
+### Purpose
+
+Communicate that a run has been imported successfully but cannot receive a score until heart-rate information is available.
+
+### Known behavior
+
+A missing-heart-rate run:
+
+- Remains in the activity table.
+- Does not display a calculated score.
+- Displays an inline message.
+- Displays the missing-heart-rate state in its run detail.
+- Allows the user to enter an estimated heart rate or delete the run.
+
+### Important distinction
+
+Missing heart rate is not the same as a failed import.
+
+The activity itself is valid and should remain accessible.
+
+**Not yet verified:** Exact message copy, warning icon, color, padding, and whether the inline message uses a banner, badge, or another component variant.
+
+---
+
+# 10. RUN DETAIL SCREEN
+
+## 10.1 Purpose
+
+Display all information associated with an individual running activity.
+
+## 10.2 Structure
+
+Known contents:
+
+1. Back navigation.
+2. Activity identifier.
+3. Title.
+4. Description.
+5. Location.
+6. Score.
+7. Activity metrics.
+8. Edit action.
+9. Delete action.
+
+### Activity identifier
+
+Uses the date and time of the activity.
+
+### Activity title
+
+Examples include "Outdoor run".
+
+### Description and location
+
+Optional contextual information about the activity.
+
+### Score
+
+The score is the most prominent numerical element on the screen.
+
+Anton should be used for the prominent score display.
+
+### Activity metrics
+
+- Distance.
+- Duration.
+- Average pace.
+- Average heart rate.
+- Elevation gain.
+- Cadence.
+
+### Actions
+
+Edit opens the edit-run screen.
+
+Delete opens a confirmation dialog.
+
+### Missing heart-rate variation
+
+When heart rate is unavailable:
+
+- Do not show a calculated score.
+- Show the missing-heart-rate message.
+- Provide a clear explanation of the missing information.
+
+**Not yet verified:** Exact metric card arrangement, score typography size, action button dimensions, and detailed spacing.
+
+---
+
+# 11. ADD RUN SCREEN
+
+## 11.1 Purpose
+
+Allow the user to manually record a running activity.
+
+## 11.2 Fields
+
+The known field structure is:
+
+1. Title.
+2. Description.
+3. Location.
+4. Date.
+5. Time.
+6. Distance.
+7. Duration.
+8. Pace.
+9. Average heart rate.
+10. Elevation gain.
+11. Cadence.
+
+### Title
+
+Required.
+
+Defaults to "Outdoor run".
+
+### Description
+
+Optional text input.
+
+### Location
+
+Optional text input.
+
+### Date
+
+Required date input.
+
+### Time
+
+Required time input.
+
+### Distance
+
+Required numeric input.
+
+Unit: kilometers.
+
+### Duration
+
+Required duration input.
+
+### Pace
+
+Required and calculated from distance and duration.
+
+### Average heart rate
+
+Required numeric input.
+
+Unit: beats per minute.
+
+### Elevation gain
+
+Optional numeric input.
+
+Unit: meters.
+
+### Cadence
+
+Optional numeric input.
+
+Unit: steps per minute.
+
+## 11.3 Interdependent fields
+
+Distance, duration, and pace are synchronized.
+
+- Changing distance recalculates pace.
+- Changing duration recalculates pace.
+- Changing pace recalculates distance.
+- Duration remains unchanged when pace is edited.
+
+## 11.4 Actions
+
+Save the run.
+
+Return or navigate back.
+
+## 11.5 Validation
+
+Required fields must be completed.
+
+Invalid values should display an error on the corresponding field.
+
+Overlapping runs must be blocked before saving.
+
+**Not yet verified:** Exact input component variants, field spacing, field grouping, helper text, error state, and button placement.
+
+---
+
+# 12. EDIT RUN SCREEN
+
+The Edit Run screen reuses the Add Run form.
+
+### Differences from Add Run
+
+- Title changes to "Edit run".
+- Existing activity data is prefilled.
+- Primary action changes to "Save changes".
+
+### Behavior
+
+Saving updates the existing activity.
+
+The score is recalculated automatically.
+
+The user receives a success notification.
+
+The visual design should remain consistent with Add Run.
+
+---
+
+# 13. PERIOD SUMMARY SCREEN
+
+## 13.1 Purpose
+
+Display an overview of a selected historical period.
+
+The screen is opened by selecting a weekly, monthly, quarterly, or yearly row.
+
+## 13.2 Structure
+
+Known contents:
+
+1. Back navigation.
+2. Period identifier.
+3. Period metrics.
+4. Number of runs.
+5. List of runs within the period.
+
+### Period identifier
+
+Examples:
+
+- A weekly date range.
+- A month and year.
+- A calendar quarter.
+- A year.
+
+### Metrics
+
+Displays average values for the period.
+
+Known metrics:
+
+- Average score.
+- Average pace.
+- Average heart rate.
+- Distance.
+- Duration.
+- Number of runs.
+
+### Run list
+
+Displays all runs within the selected period.
+
+The list reuses the activity table design without selection checkboxes.
+
+Selecting a run opens its Run Detail screen.
+
+**Not yet verified:** Exact metric layout and period header styling.
+
+---
+
+# 14. COMPARE SCREEN
+
+## 14.1 Purpose
+
+Allow users to compare selected runs or periods.
+
+## 14.2 Entry point
+
+The Compare screen opens after selecting one or more dashboard table rows and choosing Compare.
+
+## 14.3 Structure
+
+Known contents:
+
+1. Back navigation.
+2. Comparison time range.
+3. Chart.
+4. Selected activity or period list.
+
+## 14.4 Chart
+
+The chart reuses the main dashboard chart component.
+
+Selected data points are displayed chronologically.
+
+The chart follows the time grouping that was active on the dashboard.
+
+For example, selecting weekly rows produces a weekly comparison.
+
+## 14.5 Selected items
+
+The selected runs or periods are listed below the chart.
+
+The comparison should preserve the order of the selected data chronologically.
+
+**Not yet verified:** Exact visual distinction between compared series or points, selection styling, and chart legend behavior.
+
+---
+
+# 15. ACCOUNT MENU
+
+## 15.1 Entry point
+
+The account menu opens when the user taps the avatar in the dashboard header.
+
+## 15.2 Menu contents
+
+- Manage account.
+- Settings.
+- Log out.
+- Delete account.
+
+Delete account is placed at the bottom of the menu.
+
+## 15.3 Manage account
+
+Displays account information.
+
+Known contents:
+
+- Avatar.
+- Google account name.
+- Google email address.
+- Avatar upload action.
+
+Name and email are obtained from Google authentication.
+
+## 15.4 Settings
+
+Contains links to:
+
+- Privacy Policy.
+- Terms and Conditions.
+- Guides.
+
+## 15.5 Log out
+
+Ends the authenticated session.
+
+## 15.6 Delete account
+
+Initiates account deletion.
+
+This action must be treated as destructive and should require an appropriate confirmation.
+
+The actual deletion must remove the user's account and associated running data.
+
+**Not yet verified:** Exact menu dimensions, item spacing, separators, iconography, and account-page layout.
+
+---
+
+# 16. OTHER INNER PAGES
+
+The Main App inventory includes:
+
+- Documentation.
+- Terms and Conditions.
+- Privacy Policy.
+- Strava import guide.
+- Additional inner pages and supporting states.
+
+This specification documents their presence in the design inventory but does not attempt to reproduce the contents of the excluded Documentation section.
+
+The actual legal-page copy should come from the product's legal documents, not be invented from visual references.
+
+---
+
+# 17. NOTIFICATIONS, TOASTS, AND POPUPS
+
+The Main App includes notifications and popup states.
+
+Known notification types include:
+
+- Run added.
+- Run edited.
+- CSV imported.
+- Generic error.
+
+Known popup types include:
+
+- Delete confirmation.
+- CSV upload explanation.
+- CSV upload error.
+
+## 17.1 Success toast
+
+Used after a successful operation.
+
+Known cases:
+
+- Run added.
+- Run edited.
+- CSV imported.
+
+## 17.2 Generic error toast
+
+Used for general errors such as:
+
+- Failed save.
+- Failed load.
+- Connection problem.
+
+## 17.3 Delete confirmation
+
+Displayed before deleting an individual run or multiple selected records.
+
+The message should communicate the number of records being deleted.
+
+## 17.4 Upload explanation popup
+
+Explains that CSV import is supported.
+
+It provides access to the file selection action.
+
+## 17.5 Upload error popup
+
+Displays an import failure message.
+
+Known actions:
+
+- Learn more.
+- Close.
+
+**Not yet verified:** Exact toast dimensions, duration, positioning, iconography, dialog width, overlay opacity, and animation behavior.
+
+---
+
+# 18. COMPONENT LIBRARY
+
+The Component section contains reusable components intended to support the application screens.
+
+The known component categories include:
+
+1. Buttons.
+2. Inputs.
+3. Metrics.
+4. Charts.
+5. Tables.
+6. Tabs.
+7. Badges.
+8. Popups and dialogs.
+9. Inline messages.
+10. Toast notifications.
+
+These components should be implemented as reusable units rather than duplicated inside individual screens.
+
+The following sections describe their intended roles and implementation contracts.
+
+Exact variant names and property values must be confirmed against the source components before implementation.
+
+---
+
+## 18.1 BUTTON
+
+### Purpose
+
+Provide a consistent interactive control for actions.
+
+### Usage
+
+- Add Run.
+- Upload Run.
+- Save.
+- Save changes.
+- Edit.
+- Delete.
+- Compare.
+- Select file.
+- Cancel.
+- Close.
+- Learn more.
+- Google sign-in.
+
+### Expected component properties
+
+- Label.
+- Variant.
+- Size.
+- Disabled state.
+- Loading state.
+- Optional icon.
+- Click action.
+
+### Visual rules
+
+- Use the application color palette.
+- Preserve the pill-shaped button treatment where shown.
+- Maintain consistent typography.
+- Use a clear distinction between primary and secondary actions.
+- Destructive actions should use an appropriate destructive treatment.
+
+### Required implementation states
+
+- Default.
+- Hover, where applicable.
+- Pressed.
+- Disabled.
+- Loading, where applicable.
+
+**Source limitation:** The exact number and names of button variants, dimensions, icon placements, and padding values have not been re-extracted.
+
+---
+
+## 18.2 INPUT
+
+### Purpose
+
+Collect user-provided information.
+
+### Usage
+
+- Title.
+- Description.
+- Location.
+- Distance.
+- Pace.
+- Heart rate.
+- Elevation gain.
+- Cadence.
+- Other editable values.
+
+### Expected component properties
+
+- Label.
+- Value.
+- Placeholder.
+- Input type.
+- Required state.
+- Disabled state.
+- Error state.
+- Helper text.
+- Change handler.
+
+### Visual rules
+
+- Use the dark surface palette.
+- Maintain clear text contrast.
+- Provide a visible distinction between labels and entered values.
+- Errors should be visually distinguishable.
+- Numeric fields should support number-only input behavior where appropriate.
+
+### Required implementation states
+
+- Empty.
+- Filled.
+- Focused.
+- Disabled.
+- Error.
+
+**Source limitation:** Exact input heights, borders, radii, label sizes, and error-state appearance are not verified.
+
+---
+
+## 18.3 METRIC
+
+### Purpose
+
+Present important numerical information.
+
+### Usage
+
+- Score.
+- Average score.
+- Distance.
+- Duration.
+- Pace.
+- Average heart rate.
+- Elevation gain.
+- Cadence.
+- Number of runs.
+
+### Typography
+
+Anton is used for large prominent metric values.
+
+Roboto is used for labels and supporting information.
+
+### Expected component properties
+
+- Label.
+- Value.
+- Unit.
+- Optional supporting text.
+- Emphasis level.
+- Optional semantic state.
+
+### Visual rules
+
+- Values should be more prominent than labels.
+- Units should remain readable.
+- Supporting text should have lower visual emphasis.
+- Maintain consistent alignment.
+
+### Important distinction
+
+Not every metric needs to use the large Anton treatment. Use the prominent treatment for the large score and key numerical displays shown in the design.
+
+**Source limitation:** Exact metric variants, value sizes, card backgrounds, and internal alignment are not verified.
+
+---
+
+## 18.4 CHART
+
+### Purpose
+
+Display performance data over time.
+
+### Usage
+
+- Dashboard Score chart.
+- Dashboard Volume chart.
+- Compare chart.
+
+### Expected component properties
+
+- Chart mode.
+- Data points.
+- Time grouping.
+- Selected point.
+- Selected period.
+- Interaction callbacks.
+
+### Visual rules
+
+- Use the dark chart surface.
+- Keep axes and labels readable.
+- Make the selected point clear.
+- Maintain visual consistency across dashboard and comparison screens.
+
+### Interaction requirements
+
+- Point selection.
+- Vertical selection indicator.
+- Horizontal navigation.
+- Updating period information.
+- Updating chart summary metrics.
+
+### Variants
+
+- Score.
+- Volume.
+- Comparison.
+
+**Source limitation:** Exact stroke width, point size, axis colors, gridline settings, tooltip layout, and chart padding are not verified.
+
+---
+
+## 18.5 TABLE
+
+### Purpose
+
+Display running activities and aggregated periods.
+
+### Usage
+
+- Daily running activities.
+- Weekly summaries.
+- Monthly summaries.
+- Quarterly summaries.
+- Yearly summaries.
+- Run lists within period summaries.
+
+### Expected component properties
+
+- Column configuration.
+- Row data.
+- Selection state.
+- Selected rows.
+- Empty state.
+- Row click handler.
+
+### Visual rules
+
+- Preserve readable numerical alignment.
+- Keep date and metric information clearly separated.
+- Use the established dark surface and border colors.
+- Keep score indicators visually consistent.
+
+### Required behavior
+
+- Row selection.
+- Select all.
+- Multi-selection.
+- Delete selected.
+- Compare selected.
+- Open row details.
+- Open period summaries.
+
+### Variants
+
+- Daily activity table.
+- Period summary table.
+- Period run list without selection.
+
+**Source limitation:** Exact row heights, column widths, typography, dividers, checkbox styling, and hover/selection appearance are not verified.
+
+---
+
+## 18.6 TABS
+
+### Purpose
+
+Allow users to switch between related content or time groupings.
+
+### Main usage
+
+Daily, Weekly, Monthly, Quarterly, and Yearly.
+
+### Expected component properties
+
+- Options.
+- Selected value.
+- Change handler.
+- Disabled state.
+
+### Visual rules
+
+- Pill-shaped appearance.
+- Clear active state.
+- Consistent alignment.
+- Consistent spacing.
+
+**Source limitation:** Exact tab dimensions, selected background, text color, and inactive styling are not verified.
+
+---
+
+## 18.7 BADGE
+
+### Purpose
+
+Display a short status or category.
+
+### Possible application contexts
+
+- Activity status.
+- Missing heart-rate status.
+- Other small informational labels.
+
+Only the component category is confirmed. Specific badge variants and exact application usage must be checked against the source component designs.
+
+### Expected component properties
+
+- Label.
+- Semantic type.
+- Optional icon.
+- Visual state.
+
+**Source limitation:** Exact badge styles, dimensions, and variants are not verified.
+
+---
+
+## 18.8 POPUP AND DIALOG
+
+### Purpose
+
+Display important actions or information in an overlay.
+
+### Known usage
+
+- Delete confirmation.
+- CSV upload explanation.
+- CSV upload error.
+
+### Expected component properties
+
+- Title.
+- Description.
+- Content.
+- Primary action.
+- Secondary action.
+- Close behavior.
+- Destructive state.
+
+### Visual rules
+
+- Use the dark surface palette.
+- Clearly separate the dialog from the background.
+- Maintain a clear hierarchy between title, body, and actions.
+- Use appropriate destructive styling for deletion.
+
+### Behavior
+
+- Open.
+- Close.
+- Confirm.
+- Cancel.
+
+**Source limitation:** Exact dimensions, overlay opacity, corner radius, shadow, and animation are not verified.
+
+---
+
+## 18.9 INLINE MESSAGE
+
+### Purpose
+
+Communicate important information inside the current screen without opening a separate dialog.
+
+### Known usage
+
+Missing heart-rate data.
+
+### Expected component properties
+
+- Message.
+- Semantic state.
+- Optional icon.
+- Optional action.
+
+### Visual rules
+
+The message should be visible without overwhelming the main content.
+
+It should be clearly associated with the activity that needs attention.
+
+**Source limitation:** Exact semantic variants, padding, colors, and iconography are not verified.
+
+---
+
+## 18.10 TOAST
+
+### Purpose
+
+Provide temporary feedback after an action.
+
+### Known usage
+
+- Run added.
+- Run edited.
+- CSV imported.
+- Generic errors.
+
+### Expected component properties
+
+- Message.
+- Semantic state.
+- Optional icon.
+- Dismiss behavior.
+
+### Visual rules
+
+- Keep the message concise.
+- Do not obscure important content unnecessarily.
+- Use semantic colors appropriately.
+
+**Source limitation:** Exact toast placement, dimensions, timing, animation, and variants are not verified.
+
+---
+
+# 19. COMPONENT REUSE MAP
+
+The following map explains where reusable components are expected to appear.
+
+| Component | Screens |
+|---|---|
+| Button | Welcome, Dashboard, Add Run, Edit Run, Account, Dialogs |
+| Input | Add Run, Edit Run, Account |
+| Metric | Dashboard, Run Detail, Period Summary |
+| Chart | Dashboard, Compare |
+| Table | Dashboard, Period Summary |
+| Tabs | Dashboard |
+| Badge | Relevant status states |
+| Dialog | Delete, Upload |
+| Inline Message | Missing heart-rate states |
+| Toast | Success and error feedback |
+
+A component should have a consistent visual implementation across all screens.
+
+Where different contexts require different behavior, use component variants rather than duplicate components.
+
+---
+
+# 20. SCREEN-TO-COMPONENT RELATIONSHIPS
+
+## Welcome
+
+- Button.
+- Typography.
+- Legal text link.
+
+## Dashboard
+
+- Header.
+- Avatar.
+- Buttons.
+- Tabs.
+- Metrics.
+- Chart.
+- Table.
+- Score indicator.
+- Toast.
+
+## Run Detail
+
+- Back navigation.
+- Typography.
+- Metrics.
+- Inline message.
+- Buttons.
+- Dialog.
+
+## Add Run
+
+- Input.
+- Date control.
+- Time control.
+- Duration control.
+- Buttons.
+- Inline validation.
+
+## Edit Run
+
+- Input.
+- Date control.
+- Time control.
+- Duration control.
+- Buttons.
+- Inline validation.
+
+## Period Summary
+
+- Metrics.
+- Table.
+- Back navigation.
+
+## Compare
+
+- Chart.
+- Table or selected-item list.
+- Back navigation.
+
+## Account
+
+- Avatar.
+- Account information.
+- Buttons.
+- Menu items.
+
+## Settings
+
+- Navigation items.
+- Text links.
+
+## Upload
+
+- Dialog.
+- Buttons.
+- File selection.
+
+---
+
+# 21. VISUAL IMPLEMENTATION RULES
+
+The following rules should be followed when implementing the Figma design.
+
+1. Use the specified dark color palette.
+2. Use Roboto for general interface text.
+3. Use Anton for large metric and score values.
+4. Preserve the mobile reference dimensions.
+5. Use 16 px horizontal margins on the 375 px mobile frame.
+6. Use the established 8–12 px corner-radius range for common surfaces.
+7. Use pill-shaped controls where shown.
+8. Maintain the surface hierarchy.
+9. Reuse components across screens.
+10. Avoid introducing new colors without a clear reason.
+11. Avoid replacing the design with generic dashboard templates.
+12. Do not redesign the application while implementing it.
+13. Preserve the intended information hierarchy.
+14. Keep the application visually consistent across all time groupings.
+15. Ensure that the interface works with real data, not only static mockups.
+
+---
+
+# 22. DESIGN IMPLEMENTATION PRIORITIES
+
+The following order is recommended for building the interface.
+
+## Priority 1: Foundations
+
+- Color tokens.
+- Typography.
+- Surface hierarchy.
+- Spacing.
+- Border radius.
+- Base layout.
+
+## Priority 2: Reusable components
+
+- Buttons.
+- Inputs.
+- Metrics.
+- Tabs.
+- Badges.
+- Dialogs.
+- Inline messages.
+- Toasts.
+
+## Priority 3: Data components
+
+- Charts.
+- Tables.
+- Score indicators.
+
+## Priority 4: Main screens
+
+- Welcome.
+- Dashboard.
+- Run Detail.
+- Add Run.
+- Edit Run.
+- Period Summary.
+- Compare.
+
+## Priority 5: Supporting screens
+
+- Account.
+- Settings.
+- Legal pages.
+- Import states.
+- Missing-heart-rate states.
+- Empty states.
+- Notifications and dialogs.
+
+---
+
+# 23. SOURCE ACCURACY AND UNVERIFIED DETAILS
+
+This document is based on the Main page information previously extracted from the Figma file.
+
+The following information is confirmed:
+
+- Main page section organization.
+- Main application screen categories.
+- General dashboard structure.
+- Main screen inventory.
+- Color token values.
+- Typeface names and their purposes.
+- Mobile reference dimensions.
+- Common radius range.
+- Component categories.
+- General component reuse expectations.
+
+The following details still require direct inspection of the Figma source:
+
+- Exact component names.
+- Exact component variant names.
+- Exact dimensions for each component.
+- Exact typography styles and sizes.
+- Exact spacing values.
+- Exact component padding.
+- Exact button hierarchy and variants.
+- Exact input variants and states.
+- Exact table column dimensions.
+- Exact chart styling.
+- Exact popup and toast dimensions.
+- Exact icon names and sizes.
+- Exact empty-state illustrations and copy.
+- Exact responsive layouts.
+- Exact prototype interactions and transitions.
+
+Do not treat missing values as permission to invent new design decisions.
+
+Where an exact property is not specified, use the closest consistent implementation based on the confirmed design system and mark the decision for later verification.
+
+---
+
+# 24. HANDOFF INSTRUCTIONS FOR AN AI IMPLEMENTER
+
+You are implementing Runtrackr based on this specification.
+
+The original Figma file may not be available to you.
+
+Use this document as the primary visual design reference, alongside the product requirements document for application behavior.
+
+Follow these rules:
+
+1. Implement the documented colors and typefaces exactly.
+2. Preserve the dark visual language.
+3. Reuse components.
+4. Do not invent additional screens or product features.
+5. Do not replace the design with a generic dashboard template.
+6. Use the documented mobile dimensions as the initial reference.
+7. Prioritize the dashboard and reusable components.
+8. Make components functional, not just static.
+9. Follow the product specification for business logic and data behavior.
+10. Mark any visual decisions that cannot be determined from this document as assumptions.
+11. Do not silently invent exact component variants or dimensions.
+12. Keep the implementation modular so that later Figma measurements can be incorporated without rebuilding the application.
+
+**Primary design objective:** Reproduce the Runtrackr interface as closely as possible while preserving its information hierarchy, visual language, and reusable component structure.
